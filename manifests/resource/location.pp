@@ -394,7 +394,7 @@ define nginx::resource::location (
       content => join([
         template('nginx/vhost/location_header.erb'),
         $content_real,
-        template('nginx/vhost/location_footer.erb')
+        template('nginx/vhost/location_footer.erb'),
       ], ''),
       order   => $priority,
     }
@@ -409,7 +409,7 @@ define nginx::resource::location (
       content => join([
         template('nginx/vhost/location_header.erb'),
         $content_real,
-        template('nginx/vhost/location_footer.erb')
+        template('nginx/vhost/location_footer.erb'),
       ], ''),
       order   => $ssl_priority,
     }
