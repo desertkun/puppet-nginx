@@ -1,9 +1,8 @@
 require 'spec_helper_acceptance'
 
-describe "nginx::resource::vhost define:" do
+describe 'nginx::resource::vhost define:' do
   context 'new vhost on port 80' do
-    it 'should configure a nginx vhost' do
-
+    it 'configures a nginx vhost' do
       pp = "
       class { 'nginx': }
       nginx::resource::vhost { 'www.puppetlabs.com':
@@ -15,12 +14,12 @@ describe "nginx::resource::vhost define:" do
       file { '/var/www/www.puppetlabs.com/index.html': ensure  => file, content => 'Hello from www\n', }
       "
 
-      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, catch_failures: true)
     end
 
     describe file('/etc/nginx/sites-available/www.puppetlabs.com.conf') do
       it { is_expected.to be_file }
-      it { is_expected.to contain "www.puppetlabs.com" }
+      it { is_expected.to contain 'www.puppetlabs.com' }
     end
 
     describe file('/etc/nginx/sites-enabled/www.puppetlabs.com.conf') do
@@ -30,13 +29,13 @@ describe "nginx::resource::vhost define:" do
     describe service('nginx') do
       it { is_expected.to be_running }
     end
-    
+
     describe port(80) do
       it { is_expected.to be_listening }
     end
 
-    it 'should answer to www.puppetlabs.com' do
-      shell("/usr/bin/curl http://www.puppetlabs.com:80") do |r|
+    it 'answers to www.puppetlabs.com' do
+      shell('/usr/bin/curl http://www.puppetlabs.com:80') do |r|
         expect(r.stdout).to eq("Hello from www\n")
         expect(r.exit_code).to be_zero
       end
@@ -44,8 +43,7 @@ describe "nginx::resource::vhost define:" do
   end
 
   context 'should run successfully with ssl' do
-    it 'should configure a nginx SSL vhost' do
-
+    it 'configures a nginx SSL vhost' do
       pp = "
       class { 'nginx': }
       nginx::resource::vhost { 'www.puppetlabs.com':
@@ -60,12 +58,12 @@ describe "nginx::resource::vhost define:" do
       file { '/var/www/www.puppetlabs.com/index.html': ensure  => file, content => 'Hello from www\n', }
       "
 
-      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, catch_failures: true)
     end
 
     describe file('/etc/nginx/sites-available/www.puppetlabs.com.conf') do
       it { is_expected.to be_file }
-      it { is_expected.to contain "ssl on;" }
+      it { is_expected.to contain 'ssl on;' }
     end
 
     describe file('/etc/nginx/sites-enabled/www.puppetlabs.com.conf') do
@@ -80,16 +78,16 @@ describe "nginx::resource::vhost define:" do
       it { is_expected.to be_listening }
     end
 
-    it 'should answer to http://www.puppetlabs.com' do
-      shell("/usr/bin/curl http://www.puppetlabs.com:80") do |r|
+    it 'answers to http://www.puppetlabs.com' do
+      shell('/usr/bin/curl http://www.puppetlabs.com:80') do |r|
         expect(r.stdout).to eq("Hello from www\n")
         expect(r.exit_code).to eq(0)
       end
     end
 
-    it 'should answer to https://www.puppetlabs.com' do
+    it 'answers to https://www.puppetlabs.com' do
       # use --insecure because it's a self-signed cert
-      shell("/usr/bin/curl --insecure https://www.puppetlabs.com:443") do |r|
+      shell('/usr/bin/curl --insecure https://www.puppetlabs.com:443') do |r|
         expect(r.stdout).to eq("Hello from www\n")
         expect(r.exit_code).to eq(0)
       end
