@@ -92,6 +92,7 @@ class nginx::params {
 
   $client_body_temp_path = "${run_dir}/client_body_temp"
   $daemon_user           = $_module_parameters['daemon_user']
+  $daemon_group           = $_module_parameters['daemon_group']
   $global_owner          = 'root'
   $global_group          = $_module_parameters['root_group']
   $global_mode           = '0644'
